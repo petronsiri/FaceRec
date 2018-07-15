@@ -9,7 +9,9 @@ A simple working facial recognition program.
     
         Then extract those files into models
 
-    3. Run main.py
+    3. Don't forget to change your ip address in main.py
+ 
+    4. Run main.py
 
 ## Requirements:
     Python3 (3.5 ++ is recommended)
