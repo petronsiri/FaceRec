@@ -19,6 +19,7 @@ import argparse
 import sys
 import json
 import numpy as np
+import urllib
 
 def main(args):
     mode = args.mode
@@ -39,10 +40,15 @@ Images from Video Capture -> detect faces' regions -> crop those faces and align
     
 '''
 def camera_recog():
+
+    url="http://192.168.43.1:8080/shot.jpg" #change the url address
     print("[INFO] camera sensor warming up...")
-    vs = cv2.VideoCapture(0); #get input from webcam
+    #vs = cv2.VideoCapture(0); #get input from webcam
     while True:
-        _,frame = vs.read();
+        imgResp=urllib.request.urlopen(url)
+        imgNp=np.array(bytearray(imgResp.read()),dtype=np.uint8)
+        frame=cv2.imdecode(imgNp,-1)
+        #_,frame = vs.read();
         #u can certainly add a roi here but for the sake of a demo i'll just leave it as simple as this
         rects, landmarks = face_detect.detect_face(frame,80);#min face size is set to 80x80
         aligns = []
@@ -153,5 +159,5 @@ if __name__ == '__main__':
     FRGraph = FaceRecGraph();
     aligner = AlignCustom();
     extract_feature = FaceFeature(FRGraph)
-    face_detect = MTCNNDetect(FRGraph, scale_factor=2); #scale_factor, rescales image for faster detection
+    face_detect = MTCNNDetect(FRGraph, scale_factor=1); #scale_factor, rescales image for faster detection
     main(args);
